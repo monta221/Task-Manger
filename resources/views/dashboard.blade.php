@@ -14,7 +14,7 @@
             background-color: #f8f9fa;
         }
 
-        /* Sidebar */
+        
         .sidebar {
             height: 100vh;
             background-color: #343a40;
@@ -49,7 +49,7 @@
             transform: translateX(5px);
         }
 
-        /* Content */
+        
         .content {
             margin-left: 240px;
             padding: 30px;
@@ -58,7 +58,6 @@
             height: 100vh;
         }
 
-        /* Sidebar footer */
         .sidebar form button {
             font-weight: 600;
             border-radius: 8px;
@@ -68,7 +67,6 @@
             transform: translateY(-2px);
         }
 
-        /* Scrollbar for sidebar */
         .sidebar::-webkit-scrollbar {
             width: 6px;
         }
@@ -77,7 +75,6 @@
             border-radius: 3px;
         }
 
-        /* Card hover effects for content */
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 25px rgba(0,0,0,0.15);
@@ -99,15 +96,12 @@
         <div>
             <h4 class="text-center mb-4">Menu</h4>
 
-            {{-- Home --}}
             <a href="{{ route('dashboard') }}"><i class="bi bi-house-door-fill"></i>Home</a>
 
             @if($currentUser->type === 'profil')
-                {{-- Regular user --}}
                 <a href="{{ route('profil.tasks.index') }}"><i class="bi bi-list-task"></i>My Tasks</a>
 
             @elseif($currentUser->type === 'chefprojet')
-                {{-- Chef projects --}}
                 <a href="{{ route('chefprojets.index') }}"><i class="bi bi-kanban-fill"></i>My Projects</a>
 
                 @if($firstProjectId)
@@ -127,7 +121,6 @@
             @endif
         </div>
 
-        {{-- Logout --}}
         <form action="{{ route('logout') }}" method="POST" class="m-3">
             @csrf
             <button type="submit" class="btn btn-danger w-100"><i class="bi bi-box-arrow-right"></i> Logout</button>
@@ -135,7 +128,6 @@
     </nav>
 
     <div class="content">
-        {{-- Main content injected here --}}
         @yield('main-content')
     </div>
 </body>
