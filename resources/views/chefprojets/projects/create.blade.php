@@ -10,9 +10,8 @@
         </div>
     @endif
 
-    <form action="{{ route('projets.store') }}" method="POST">
+    <form action="{{ route('chefprojets.store_project') }}" method="POST">
         @csrf
-
         <div class="mb-3">
             <label class="form-label">Title</label>
             <input type="text" name="titreProjet" class="form-control" value="{{ old('titreProjet') }}" required>
@@ -41,26 +40,14 @@
         <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="etat" class="form-select" required>
-                <option value="En attente" {{ old('etat')=='En attente' ? 'selected' : '' }}>Pending</option>
-                <option value="En cours" {{ old('etat')=='En cours' ? 'selected' : '' }}>In Progress</option>
-                <option value="Terminé" {{ old('etat')=='Terminé' ? 'selected' : '' }}>Completed</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Assign Chef</label>
-            <select name="chefprojet_id" class="form-select">
-                <option value="">-- Select Chef --</option>
-                @foreach($chefs as $chef)
-                    <option value="{{ $chef->utilisateur_id }}" {{ old('chefprojet_id')==$chef->utilisateur_id ? 'selected' : '' }}>
-                        {{ $chef->nom }} {{ $chef->prenom }}
-                    </option>
-                @endforeach
+                <option value="En attente" {{ old('etat')=='En attente' ? 'selected':'' }}>Pending</option>
+                <option value="En cours" {{ old('etat')=='En cours' ? 'selected':'' }}>In Progress</option>
+                <option value="Terminé" {{ old('etat')=='Terminé' ? 'selected':'' }}>Completed</option>
             </select>
         </div>
 
         <button class="btn btn-success">Create</button>
-        <a href="{{ route('projets.index') }}" class="btn btn-secondary">Cancel</a>
+        <a href="{{ route('chefprojets.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

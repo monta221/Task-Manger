@@ -26,7 +26,6 @@ class Utilisateur extends Authenticatable
         'remember_token',
     ];
 
-    // Many-to-many relation with projets
     public function projets()
     {
         return $this->belongsToMany(
@@ -39,19 +38,16 @@ class Utilisateur extends Authenticatable
         ->withTimestamps();
     }
 
-    // One-to-many relation with ProjetAssignee
     public function projetAssignees()
     {
         return $this->hasMany(ProjetAssignee::class, 'utilisateur_id', 'utilisateur_id');
     }
 
-    // Relation to typeCompte
     public function typeCompte()
     {
         return $this->hasOne(TypeCompte::class, 'utilisateur_id', 'utilisateur_id');
     }
 
-    // Role helper functions
     public function hasRole(string $role): bool
     {
         return $this->type === $role;

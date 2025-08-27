@@ -18,6 +18,7 @@ class Projet extends Model
         'dateFin',
         'note',  
         'etat',
+        'chefprojet_id',
     ];
 
     public function utilisateurs()
@@ -36,4 +37,13 @@ class Projet extends Model
     {
         return $this->hasMany(Tache::class, 'projet_id', 'projet_id');
     }
+    public function chefprojet()
+    {
+        return $this->belongsTo(Utilisateur::class, 'chefprojet_id', 'utilisateur_id');
+    }
+    public function chef()
+    {
+        return $this->belongsTo(\App\Models\Utilisateur::class, 'chefprojet_id', 'utilisateur_id');
+    }
+
 }
