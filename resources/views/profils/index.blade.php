@@ -9,6 +9,9 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
@@ -23,6 +26,10 @@
     </thead>
     <tbody>
         @forelse($utilisateurs as $user)
+            @php
+                $tasksCount = $user->taches()->count();
+                $projectsCount = $user->chefProjets()->count();
+            @endphp
             <tr>
                 <td>{{ $user->utilisateur_id }}</td>
                 <td>{{ $user->nom }}</td>
@@ -31,11 +38,16 @@
                 <td>{{ $user->type }}</td>
                 <td>
                     <a href="{{ route('profils.edit', $user->utilisateur_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('profils.destroy', $user->utilisateur_id) }}" method="POST" style="display:inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this user?')">Delete</button>
-                    </form>
+
+                    @if($tasksCount === 0 && $projectsCount === 0)
+                        <form action="{{ route('profils.destroy', $user->utilisateur_id) }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this user?')">Delete</button>
+                        </form>
+                    @else
+                        <button class="btn btn-danger btn-sm" disabled title="Cannot delete user with tasks or projects">Delete</button>
+                    @endif
                 </td>
             </tr>
         @empty

@@ -20,6 +20,7 @@
                 <th>Status</th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                <th>Note</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -45,6 +46,7 @@
                     </td>
                     <td>{{ $tache->dateCreation }}</td>
                     <td>{{ $tache->dateFin ?? '-' }}</td>
+                    <td>{{ $tache->note }}</td>
                     <td>
                         <a href="{{ route('projets.taches.edit', [$projet->projet_id, $tache->tache_id]) }}" class="btn btn-sm btn-warning">Edit</a>
                         <form action="{{ route('projets.taches.destroy', [$projet->projet_id, $tache->tache_id]) }}" method="POST" class="d-inline">

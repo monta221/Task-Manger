@@ -9,6 +9,9 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 
 <table class="table table-bordered table-striped align-middle">
     <thead class="table-dark">
@@ -63,10 +66,15 @@
                 </div>
             </td>
             <td>
-                <a href="{{ route('chefprojets.tasks.project', $projet->projet_id) }}" class="btn btn-sm btn-primary">View Project Tasks</a>
+                <a href="{{ route('chefprojets.tasks.project', $projet->projet_id) }}" class="btn btn-sm btn-primary">View Tasks</a>
             </td>
-            <td>
+            <td class="d-flex gap-1">
                 <a href="{{ route('chefprojets.edit_project', $projet->projet_id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <form action="{{ route('chefprojets.destroy_project', $projet->projet_id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this project and all its tasks?')">Delete</button>
+                </form>
             </td>
         </tr>
         @empty

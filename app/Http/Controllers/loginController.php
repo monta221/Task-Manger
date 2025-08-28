@@ -17,7 +17,6 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
-        //dd($credentials, \App\Models\utilisateur::where('email', $request->email)->first());
 
 
         if (Auth::attempt($credentials)) {

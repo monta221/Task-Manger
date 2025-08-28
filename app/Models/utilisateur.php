@@ -57,4 +57,14 @@ class Utilisateur extends Authenticatable
     {
         return in_array($this->type, $roles);
     }
+    public function taches()
+    {
+        return $this->hasMany(Tache::class, 'utilisateur_id', 'utilisateur_id');
+    }
+
+    public function chefProjets()
+    {
+        return $this->hasMany(Projet::class, 'chefprojet_id', 'utilisateur_id');
+    }
+
 }

@@ -27,7 +27,7 @@
 
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea name="description" class="form-control">{{ old('description') }}</textarea>
+        <textarea name="description" class="form-control" required>{{ old('description') }}</textarea>
     </div>
 
     <div class="mb-3">
@@ -41,7 +41,7 @@
 
     <div class="mb-3">
         <label for="utilisateur_id" class="form-label">Assign to User</label>
-        <select name="utilisateur_id" class="form-control">
+        <select name="utilisateur_id" class="form-control" required>
             <option value="">-- Select User --</option>
             @foreach($utilisateurs as $user)
                 <option value="{{ $user->utilisateur_id }}" 
@@ -61,7 +61,13 @@
         <label for="dateFin" class="form-label">End Date</label>
         <input type="date" name="dateFin" class="form-control" value="{{ old('dateFin') }}">
     </div>
+    <div class="mb-3">
+        <label class="form-label">Note (0-20)</label>
+        <input type="number" name="note" class="form-control" min="0" max="20" value="{{ old('note') }}">
+    </div>
+    
 
     <button type="submit" class="btn btn-success">Save Task</button>
+    <a href="{{ route('projets.index', $projet->projet_id) }}" class="btn btn-secondary">Cancel</a>
 </form>
 @endsection

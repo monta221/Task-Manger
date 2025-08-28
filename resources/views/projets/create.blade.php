@@ -20,7 +20,7 @@
 
         <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea name="description" class="form-control">{{ old('description') }}</textarea>
+            <textarea name="description" class="form-control" required>{{ old('description') }}</textarea>
         </div>
 
         <div class="mb-3">
@@ -49,7 +49,7 @@
 
         <div class="mb-3">
             <label class="form-label">Assign Chef</label>
-            <select name="chefprojet_id" class="form-select">
+            <select name="chefprojet_id" class="form-select" required>
                 <option value="">-- Select Chef --</option>
                 @foreach($chefs as $chef)
                     <option value="{{ $chef->utilisateur_id }}" {{ old('chefprojet_id')==$chef->utilisateur_id ? 'selected' : '' }}>

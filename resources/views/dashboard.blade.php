@@ -105,16 +105,14 @@
                 <a href="{{ route('chefprojets.index') }}"><i class="bi bi-kanban-fill"></i>My Projects</a>
 
                 @if($firstProjectId)
-                    {{-- Uncomment to link directly to first project tasks --}}
                     {{-- <a href="{{ route('chefprojets.tasks.index', $firstProjectId) }}"><i class="bi bi-list-check"></i>My Tasks</a> --}}
                 @endif
 
             @else
-                {{-- Admin & Dev --}}
                 <a href="{{ route('projets.index') }}"><i class="bi bi-kanban-fill"></i>Project Management</a>
 
                 @if(\App\Models\Projet::first())
-                    {{-- <a href="{{ route('projets.taches.index', \App\Models\Projet::first()->projet_id) }}"><i class="bi bi-list-task"></i>Task Management</a> --}}
+                     {{--  <a href="{{ route('projets.taches.index', \App\Models\Projet::first()->projet_id) }}"><i class="bi bi-list-task"></i>Task Management</a>--}}
                 @endif
 
                 <a href="{{ route('profils.index') }}"><i class="bi bi-people-fill"></i>Profile Management</a>

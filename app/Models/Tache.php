@@ -18,6 +18,7 @@ class Tache extends Model
         'etat',      
         'dateCreation',
         'dateFin',
+        'note',
     ];
 
     public function projet()

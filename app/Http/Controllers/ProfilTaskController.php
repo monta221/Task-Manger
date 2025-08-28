@@ -18,15 +18,23 @@ class ProfilTaskController extends Controller
     }
 
     public function updateStatus(Request $request, Tache $tache)
-    {
-        $request->validate([
-            'etat' => 'required|in:en attente,en cours,terminé',
-        ]);
+{
+    $request->validate([
+        'etat' => 'required|in:en attente,en cours,terminé',
+    ]);
 
-        $tache->update([
-            'etat' => $request->etat
-        ]);
+    $currentStatus = strtolower($tache->etat);
+    $newStatus = strtolower($request->etat);
 
-        return redirect()->route('profil.tasks.index')->with('success', 'Task status updated!');
+    if ($currentStatus === 'en cours' && $newStatus === 'en attente') {
+        return redirect()->back()->with('error', 'You cannot move a task from "In Progress" back to "Pending".');
     }
+
+    $tache->update([
+        'etat' => $request->etat
+    ]);
+
+    return redirect()->route('profil.tasks.index')->with('success', 'Task status updated!');
+}
+
 }

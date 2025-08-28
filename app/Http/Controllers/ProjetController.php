@@ -10,7 +10,6 @@ class ProjetController extends Controller
 {
     public function index()
     {
-        // Load projects with chef and tasks
         $projets = Projet::with('chef', 'taches.utilisateur')->get();
         return view('projets.index', compact('projets'));
     }
@@ -25,12 +24,12 @@ class ProjetController extends Controller
     {
         $validated = $request->validate([
             'titreProjet' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|nullable|string',
             'dateDebut' => 'required|date',
             'dateFin' => 'nullable|date|after_or_equal:dateDebut',
             'note' => 'nullable|integer|between:0,20',
             'etat' => 'required|in:En attente,En cours,Terminé',
-            'chefprojet_id' => 'nullable|exists:utilisateurs,utilisateur_id',
+            'chefprojet_id' => 'required|nullable|exists:utilisateurs,utilisateur_id',
         ]);
 
         Projet::create($validated);
@@ -53,7 +52,7 @@ class ProjetController extends Controller
             'dateFin' => 'nullable|date|after_or_equal:dateDebut',
             'note' => 'nullable|integer|between:0,20',
             'etat' => 'required|in:En attente,En cours,Terminé',
-            'chefprojet_id' => 'nullable|exists:utilisateurs,utilisateur_id',
+            'chefprojet_id' => 'required|nullable|exists:utilisateurs,utilisateur_id',
         ]);
 
         $projet->update($validated);

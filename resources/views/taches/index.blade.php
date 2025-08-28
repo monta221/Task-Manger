@@ -6,6 +6,9 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 
 @foreach($projets as $projet)
     <div class="card mb-4">
@@ -24,38 +27,43 @@
                             <th>Status</th>
                             <th>Start Date</th>
                             <th>End Date</th>
+                            <th>Note</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($projet->taches as $tache)
+                            @php
+                                $status = strtolower($tache->etat);
+                                $badgeClass = match($status) {
+                                    'terminé', 'terminee' => 'bg-success',
+                                    'en cours' => 'bg-warning text-dark',
+                                    'en attente' => 'bg-secondary',
+                                    default => 'bg-light text-dark'
+                                };
+                            @endphp
                             <tr>
                                 <td>{{ $tache->titreTache }}</td>
                                 <td>{{ $tache->description }}</td>
                                 <td>{{ $tache->utilisateur ? $tache->utilisateur->nom : '-' }}</td>
                                 <td>
-                                    @php
-                                        $status = strtolower($tache->etat);
-                                        $badgeClass = match($status) {
-                                            'terminé', 'terminee' => 'bg-success',   
-                                            'en cours' => 'bg-warning text-dark',    
-                                            'en attente' => 'bg-secondary',         
-                                            default => 'bg-light text-dark'
-                                        };
-                                    @endphp
-                                    <span class="badge {{ $badgeClass }}">
-                                        {{ ucfirst($tache->etat) }}
-                                    </span>
+                                    <span class="badge {{ $badgeClass }}">{{ ucfirst($tache->etat) }}</span>
                                 </td>
                                 <td>{{ $tache->dateCreation }}</td>
                                 <td>{{ $tache->dateFin ?? '-' }}</td>
+                                <td>{{ $tache->note }}</td>
                                 <td>
                                     <a href="{{ route('projets.taches.edit', [$projet->projet_id, $tache->tache_id]) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    <form action="{{ route('projets.taches.destroy', [$projet->projet_id, $tache->tache_id]) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                    </form>
+
+                                    @if(in_array($status, ['en attente', 'terminé']))
+                                        <form action="{{ route('projets.taches.destroy', [$projet->projet_id, $tache->tache_id]) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                        </form>
+                                    @else
+                                        <button class="btn btn-sm btn-danger" disabled title="Cannot delete task in progress">Delete</button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

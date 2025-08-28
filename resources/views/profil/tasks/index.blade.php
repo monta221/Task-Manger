@@ -7,6 +7,10 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
 <div class="list-group">
     @forelse($tasks as $task)
         <div class="list-group-item mb-2 d-flex justify-content-between align-items-center shadow-sm">
@@ -21,7 +25,11 @@
                     @csrf
                     @method('PUT')
                     <select name="etat" class="form-select form-select-sm" onchange="this.form.submit()">
-                        <option value="en attente" {{ $task->etat=='en attente' ? 'selected' : '' }}>Pending</option>
+                        <option value="en attente" 
+                            {{ $task->etat=='en attente' ? 'selected' : '' }}
+                            {{ $task->etat=='en cours' ? 'disabled' : '' }}>
+                            Pending
+                        </option>
                         <option value="en cours" {{ $task->etat=='en cours' ? 'selected' : '' }}>In Progress</option>
                         <option value="terminé" {{ $task->etat=='terminé' ? 'selected' : '' }}>Finished</option>
                     </select>
@@ -36,5 +44,5 @@
     @empty
         <p>You have no tasks assigned.</p>
     @endforelse
-</div>
+</div>  
 @endsection

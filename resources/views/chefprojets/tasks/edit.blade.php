@@ -3,7 +3,7 @@
 @section('main-content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Edit Task</h2>
-    <a href="{{ route('chefprojets.index') }}" class="btn btn-secondary">← Back</a>
+    <a href="{{ route('chefprojets.tasks.project', $projet->projet_id) }}" class="btn btn-secondary">← Back</a>
 </div>
 
 @if(session('success'))
@@ -43,7 +43,7 @@
 
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea name="description" class="form-control">{{ $tache->description }}</textarea>
+        <textarea name="description" class="form-control" required>{{ $tache->description }}</textarea>
     </div>
 
     <div class="mb-3">
@@ -57,7 +57,8 @@
 
     <div class="mb-3">
         <label for="utilisateur_id" class="form-label">Assign to User</label>
-        <select name="utilisateur_id" class="form-control">
+        <select name="utilisateur_id" class="form-control"
+            @if(strtolower($tache->etat) === 'terminé') disabled @endif>
             <option value="">-- Select User --</option>
             @foreach($utilisateurs as $user)
                 <option value="{{ $user->utilisateur_id }}" 
@@ -66,6 +67,8 @@
                 </option>
             @endforeach
         </select>
+        @if(strtolower($tache->etat) === 'terminé')
+        @endif
     </div>
 
     <div class="mb-3">

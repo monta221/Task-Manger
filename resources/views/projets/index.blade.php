@@ -17,8 +17,8 @@
             <th>Chef</th>
             <th>Title</th>
             <th>Description</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
             <th>Note</th>
             <th>Status</th>
             <th>Progress</th>
@@ -97,7 +97,7 @@
                     @endforeach
                 </div>
                 @else
-                    <span>No tasks</span>
+                    <a href="{{ route('projets.taches.index', $projet->projet_id) }}" class="btn btn-sm btn-primary">View Tasks</a>    
                 @endif
             </td>
 

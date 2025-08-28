@@ -42,7 +42,7 @@
 
     <div class="mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea name="description" class="form-control">{{ $tache->description }}</textarea>
+        <textarea name="description" class="form-control" required>{{ $tache->description }}</textarea>
     </div>
 
     <div class="mb-3">
@@ -56,7 +56,7 @@
 
     <div class="mb-3">
         <label for="utilisateur_id" class="form-label">Assign to User</label>
-        <select name="utilisateur_id" class="form-control">
+        <select name="utilisateur_id" class="form-control" {{ $tache->etat == 'terminé' ? 'disabled' : '' }}>
             <option value="">-- Select User --</option>
             @foreach($utilisateurs as $user)
                 <option value="{{ $user->utilisateur_id }}" {{ $tache->utilisateur_id==$user->utilisateur_id?'selected':'' }}>
@@ -74,6 +74,11 @@
     <div class="mb-3">
         <label for="dateFin" class="form-label">End Date</label>
         <input type="date" name="dateFin" class="form-control" value="{{ $tache->dateFin }}">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Note (0-20)</label>
+        <input type="number" name="note" class="form-control" min="0" max="20" value="{{ old('note', $projet->note) }}">
     </div>
 
     <button type="submit" class="btn btn-success">Update Task</button>

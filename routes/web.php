@@ -45,7 +45,7 @@ Route::prefix('chef')->name('chefprojets.')->middleware('auth')->group(function 
     Route::post('/projects/store', [ChefProjetController::class, 'storeProject'])->name('store_project');
     Route::get('/projects/{projet}/edit', [ChefProjetController::class, 'editProject'])->name('edit_project');
     Route::put('/projects/{projet}', [ChefProjetController::class, 'updateProject'])->name('update_project');
-
+    
     // Tasks
     Route::get('/projects/{projet}/tasks', [ChefProjetController::class, 'tasksIndex'])->name('tasks.index'); 
     Route::get('/projects/{projet}/tasks/create', [ChefProjetController::class, 'createTask'])->name('create_task');
@@ -55,7 +55,8 @@ Route::prefix('chef')->name('chefprojets.')->middleware('auth')->group(function 
     Route::delete('/projects/{projet}/tasks/{tache}', [ChefProjetController::class, 'destroyTask'])->name('destroy_task');
 
 });
-
+Route::delete('/chefprojets/projects/{projet}', [ChefProjetController::class, 'destroyProject'])
+    ->name('chefprojets.destroy_project');
 Route::get('/projects/{projet}/tasks-only', [ChefProjetController::class, 'projectTasks'])
      ->name('chefprojets.tasks.project');
 Route::get('/projets/{projet}/taches', [ProjetController::class, 'showTasks'])
