@@ -41,8 +41,10 @@ class ChefProjetController extends Controller
     {
         $data = $this->validateProject($request);
         $data['chefprojet_id'] = auth()->id();
-        Projet::create($data);
-        return redirect()->route('chefprojets.index')->with('success', 'Project created successfully!');
+        $projet = Projet::create($data);
+
+        return redirect()->route('chefprojets.tasks.project', $projet->projet_id)
+                         ->with('success', 'Project created successfully!');
     }
 
     public function editProject(Projet $projet)
@@ -55,15 +57,18 @@ class ChefProjetController extends Controller
     {
         $this->authorizeProject($projet);
         $projet->update($this->validateProject($request));
-        return back()->with('success', 'Project updated successfully!');
+
+        return redirect()->route('chefprojets.tasks.project', $projet->projet_id)
+                         ->with('success', 'Project updated successfully!');
     }
 
-    public function tasksIndex()
+    public function destroyProject(Projet $projet)
     {
-        $projets = Projet::where('chefprojet_id', auth()->id())
-            ->with('taches.utilisateur')
-            ->get();
-        return view('chefprojets.tasks.index', compact('projets'));
+        $this->authorizeProject($projet);
+        $projet->taches()->delete();
+        $projet->delete();
+
+        return redirect()->route('chefprojets.index')->with('success', 'Project deleted successfully!');
     }
 
     private function validateTask(Request $request)
@@ -82,6 +87,7 @@ class ChefProjetController extends Controller
     {
         $this->authorizeProject($projet);
         $utilisateurs = Utilisateur::whereIn('type', ['profil'])->get();
+
         return view('chefprojets.tasks.create', compact('projet', 'utilisateurs'));
     }
 
@@ -91,64 +97,60 @@ class ChefProjetController extends Controller
         $data = $this->validateTask($request);
         $data['projet_id'] = $projet->projet_id;
         Tache::create($data);
-        return redirect()->route('chefprojets.index')->with('success', 'Task created successfully!');
+
+        return redirect()->route('chefprojets.tasks.project', $projet->projet_id)
+                         ->with('success', 'Task created successfully!');
     }
 
     public function editTask($projet_id, $tache_id)
     {
         $projet = Projet::findOrFail($projet_id);
         $this->authorizeProject($projet);
+
         $tache = Tache::findOrFail($tache_id);
-        $utilisateurs = Utilisateur::whereIn('type',['dev','profil'])->get();
-        $projets = Projet::where('chefprojet_id', auth()->id())->get();
-        return view('chefprojets.tasks.edit', compact('projet','tache','utilisateurs','projets'));
+        $utilisateurs = Utilisateur::whereIn('type',['profil'])->get();
+
+        return view('chefprojets.tasks.edit', compact('projet','tache','utilisateurs'));
     }
 
     public function updateTask(Request $request, $projet_id, $tache_id)
     {
         $projet = Projet::findOrFail($projet_id);
         $this->authorizeProject($projet);
+
         $tache = Tache::findOrFail($tache_id);
         $data = $this->validateTask($request);
-        if (strtolower($tache->etat) === 'terminé') unset($data['utilisateur_id']);
-        $tache->update($data);
-        return back()->with('success', 'Task updated successfully!');
-    }
 
-    public function updateStatus(Request $request, Tache $tache)
-    {
-        $request->validate(['etat' => 'required|in:en attente,en cours,terminé']);
-        if ($tache->etat === 'en cours' && $request->etat === 'en attente') {
-            return redirect()->route('profil.tasks.index')->with('error', 'Cannot move task back to pending.');
-        }
-        $tache->update(['etat' => $request->etat]);
-        return redirect()->route('profil.tasks.index')->with('success', 'Task status updated!');
+        if (strtolower($tache->etat) === 'terminé') unset($data['utilisateur_id']);
+
+        $tache->update($data);
+
+        return redirect()->route('chefprojets.tasks.project', $projet->projet_id)
+                         ->with('success', 'Task updated successfully!');
     }
 
     public function destroyTask($projet_id, $tache_id)
     {
         $projet = Projet::findOrFail($projet_id);
         $this->authorizeProject($projet);
+
         $tache = Tache::findOrFail($tache_id);
         if (!in_array(strtolower($tache->etat), ['en attente', 'terminé'])) {
-            return redirect()->route('chefprojets.index')->with('error', 'Cannot delete task in progress.');
+            return redirect()->route('chefprojets.tasks.project', $projet->projet_id)
+                                ->with('error', 'Cannot delete task in progress.');
         }
+
         $tache->delete();
-        return redirect()->route('chefprojets.index')->with('success', 'Task deleted successfully!');
+
+        return redirect()->route('chefprojets.tasks.project', $projet->projet_id)
+                         ->with('success', 'Task deleted successfully!');
     }
 
     public function projectTasks(Projet $projet)
     {
         $this->authorizeProject($projet);
         $projet->load('taches.utilisateur');
-        return view('chefprojets.tasks.project', compact('projet'));
-    }
 
-    public function destroyProject(Projet $projet)
-    {
-        $this->authorizeProject($projet);
-        $projet->taches()->delete();
-        $projet->delete();
-        return redirect()->route('chefprojets.index')->with('success', 'Projectdeleted successfully!');
+        return view('chefprojets.tasks.project', compact('projet'));
     }
 }

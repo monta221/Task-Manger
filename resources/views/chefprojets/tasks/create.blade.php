@@ -17,8 +17,6 @@
     <form action="{{ route('chefprojets.store_task', $projet->projet_id) }}" method="POST">
         @csrf
 
-        <input type="hidden" name="projet_id" value="{{ $projet->projet_id }}">
-
         <div class="mb-3">
             <label for="titreTache" class="form-label">Title</label>
             <input type="text" name="titreTache" class="form-control" value="{{ old('titreTache') }}" required>
@@ -31,7 +29,7 @@
 
         <div class="mb-3">
             <label for="utilisateur_id" class="form-label">Assign to User</label>
-            <select name="utilisateur_id" class="form-select" required>
+            <select name="utilisateur_id" class="form-select">
                 <option value="">-- Unassigned --</option>
                 @foreach($utilisateurs as $user)
                     <option value="{{ $user->utilisateur_id }}" 
@@ -62,7 +60,7 @@
         </div>
 
         <button class="btn btn-success">Create Task</button>
-        <a href="{{ route('chefprojets.index', $projet->projet_id) }}" class="btn btn-secondary">Cancel</a>
+        <a href="{{ route('chefprojets.tasks.project', $projet->projet_id) }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 @endsection

@@ -3,7 +3,7 @@
 @section('main-content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Edit Task</h2>
-    <a href="{{ route('chefprojets.tasks.project', $projet->projet_id) }}" class="btn btn-secondary">← Back</a>
+    <a href="{{ route('chefprojets.tasks.project', $tache->projet_id) }}" class="btn btn-secondary">← Back</a>
 </div>
 
 @if(session('success'))
@@ -23,18 +23,6 @@
 <form action="{{ route('chefprojets.update_task', [$tache->projet_id, $tache->tache_id]) }}" method="POST">
     @csrf
     @method('PUT')
-
-    <div class="mb-3">
-        <label for="projet_id" class="form-label">Project</label>
-        <select name="projet_id" class="form-control" required>
-            @foreach($projets as $projetItem)
-                <option value="{{ $projetItem->projet_id }}" 
-                    {{ $tache->projet_id == $projetItem->projet_id ? 'selected' : '' }}>
-                    {{ $projetItem->titreProjet }}
-                </option>
-            @endforeach
-        </select>
-    </div>
 
     <div class="mb-3">
         <label for="titreTache" class="form-label">Title</label>
@@ -57,9 +45,8 @@
 
     <div class="mb-3">
         <label for="utilisateur_id" class="form-label">Assign to User</label>
-        <select name="utilisateur_id" class="form-control"
-            @if(strtolower($tache->etat) === 'terminé') disabled @endif>
-            <option value="">-- Select User --</option>
+        <select name="utilisateur_id" class="form-control" @if(strtolower($tache->etat)=='terminé') disabled @endif>
+            <option value="">-- Unassigned --</option>
             @foreach($utilisateurs as $user)
                 <option value="{{ $user->utilisateur_id }}" 
                     {{ $tache->utilisateur_id == $user->utilisateur_id ? 'selected' : '' }}>
@@ -67,8 +54,6 @@
                 </option>
             @endforeach
         </select>
-        @if(strtolower($tache->etat) === 'terminé')
-        @endif
     </div>
 
     <div class="mb-3">
@@ -82,5 +67,6 @@
     </div>
 
     <button type="submit" class="btn btn-success">Update Task</button>
+    <a href="{{ route('chefprojets.tasks.project', $tache->projet_id) }}" class="btn btn-secondary">Cancel</a>
 </form>
 @endsection
